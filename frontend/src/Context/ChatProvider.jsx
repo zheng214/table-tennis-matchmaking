@@ -41,6 +41,9 @@ export default function ChatProvider({ children }) {
   }, [history])
 
   const fetchChats = async () => {
+    if (!user) {
+      return;
+    }
     try {
       const config = {
         headers: {
@@ -57,7 +60,7 @@ export default function ChatProvider({ children }) {
 
   useEffect(() => {
     fetchChats();
-  }, [])
+  }, [user])
 
   const updateSeenChat = async () => {
     if (!selectedChat) {
