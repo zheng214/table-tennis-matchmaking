@@ -109,7 +109,7 @@ export default function SearchPage(props) {
       setSearchResults(allSearchResults.filter(user => user.level === level))
     }
   }, [level])
-
+  console.log({ searchResults })
   return (
     <>
       <Topbar />

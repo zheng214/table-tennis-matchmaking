@@ -27,7 +27,7 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
 import { Container, IconButton, ListItemButton, TextField } from '@mui/material';
 
-const ENDPOINT = 'https://table-tennis-matchmaking.herokuapp.com/'
+const ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
 let socket;
 let selectedChatCompare;
 

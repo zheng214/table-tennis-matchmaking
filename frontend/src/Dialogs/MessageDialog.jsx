@@ -15,7 +15,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const ENDPOINT = 'https://table-tennis-matchmaking.herokuapp.com/'
+const ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
 let socket;
 
 export default function MessageDialog(props) {

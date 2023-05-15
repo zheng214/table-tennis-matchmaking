@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export const ChatContext = createContext();
 
-const ENDPOINT = 'https://table-tennis-matchmaking.herokuapp.com/'
+const ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
 let socket;
 
 export default function ChatProvider({ children }) {
