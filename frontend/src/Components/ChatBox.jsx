@@ -27,17 +27,21 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
 import { Container, IconButton, ListItemButton, TextField } from '@mui/material';
 
-const ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
+let ENDPOINT;
+if (process.env.NODE_ENV === 'production') {
+  ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
+} else {
+  ENDPOINT = 'http://localhost:5000'
+}
+
 let socket;
 let selectedChatCompare;
 
 export default function ChatBox() {
-  const { user, chats, setChats, selectedChat, setSelectedChat, notifications, setNotifications, messages, setMessages } = ChatState();
+  const { user, chats, setChats, selectedChat, setSelectedChat, notifications, setNotifications, messages, setMessages, socketConnected } = ChatState();
 
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState('');
-  // const [messages, setMessages] = useState([]);
-  const [socketConnected, setSocketConnected] = useState(false);
   const [typingUsers, setTypingUsers] = useState([]);
 
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
@@ -96,7 +100,6 @@ export default function ChatBox() {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.on('connected', () => setSocketConnected(true))
     socket.on('typing', ({ chatId, userId }) => {
       if (!typingUsers.includes(userId)) {
         setTypingUsers([...typingUsers, userId])
@@ -178,7 +181,6 @@ export default function ChatBox() {
 
   const handleTyping = (e) => {
     setNewMessage(e.target.value)
-
     if (!socketConnected) return;
     socket.emit('typing', { chatId: selectedChat._id, userId: user._id });
     let lastTypingTime = new Date().getTime();

@@ -5,9 +5,13 @@ import axios from 'axios';
 
 export const ChatContext = createContext();
 
-const ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
-// const ENDPOINT = 'http://localhost:5000'
-console.log(process.env.NODE_ENV)
+let ENDPOINT;
+if (process.env.NODE_ENV === 'production') {
+  ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
+} else {
+  ENDPOINT = 'http://localhost:5000'
+}
+
 let socket;
 
 export default function ChatProvider({ children }) {

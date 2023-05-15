@@ -87,12 +87,6 @@ export default function ProfileDialog(props) {
     setEditingAvailability(false);
   }
 
-  // useEffect(() => {
-  //   console.log()
-  //   setSavedCity(user.city);
-  //   setSavedAvailability(user.availability);
-  // }, [])
-
   const [pic, setPic] = useState(user.pic);
   const [savedPic, setSavedPic] = useState(user.pic);
   const [imageErrSnackbarOpen, setImageErrSnackbarOpen] = useState(false);

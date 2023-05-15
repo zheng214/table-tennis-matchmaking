@@ -15,7 +15,13 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
+let ENDPOINT;
+if (process.env.NODE_ENV === 'production') {
+  ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
+} else {
+  ENDPOINT = 'http://localhost:5000'
+}
+
 let socket;
 
 export default function MessageDialog(props) {

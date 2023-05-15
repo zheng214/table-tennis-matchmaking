@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
 
   socket.on('leave room', (room) => {
     console.log('leaving room ', room)
-    // socket.leave(room);
+    socket.leave(room);
   })
 
   socket.off('setup', () => {

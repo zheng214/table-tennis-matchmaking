@@ -73,7 +73,7 @@ const authUser = asyncHandler(async (req, res) => {
 const allUsers = asyncHandler(async (req, res) => {
   try {
     let { search } = req.query;
-    search = search.replace(/[^a-z0-9]/gi, '');
+    search = search.replace(/[^a-z0-9\-\']/gi, '');
     if (!search) {
       return res.send([])
     }
