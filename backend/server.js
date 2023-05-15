@@ -17,6 +17,13 @@ dotenv.config();
 connectDB();
 
 const __dirname1 = path.resolve();
+
+app.use('/api/user', userRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/message', messageRoutes);
+
+
+// -------------- DEPLOYMENT ---------------
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname1, '/frontend/build')))
 
@@ -28,14 +35,6 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running')
   })
 }
-
-app.use('/api/user', userRoutes);
-app.use('/api/chat', chatRoutes);
-app.use('/api/message', messageRoutes);
-
-
-// -------------- DEPLOYMENT ---------------
-
 // -------------- DEPLOYMENT ---------------
 
 
