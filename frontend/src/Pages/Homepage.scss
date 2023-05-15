@@ -1,0 +1,94 @@
+.app-homepage {
+  display: flex;
+  width: 100vw;
+  min-height: 100vh;
+  overflow: auto;
+  &.tablet, &.mobile{
+    height: 100vh;
+    background-image: url('../tt3.jpg');
+    background-size: cover;
+    justify-content: center;
+  }
+}
+
+.left {
+  width: calc(100vw - 420px);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-image: url('../tt3.jpg');
+  background-size: cover;
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 72px;
+  animation-name: fadeInBottom;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  &.tablet {
+    font-size: 22px;
+    animation-name: fadeInRight;
+  }
+  &.mobile {
+    font-size: 18px;
+    animation-name: fadeInRight;
+    padding: 10px;
+    margin: 10px 0px 0px 0px;
+  }
+}
+
+.desc {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 48px;
+  animation-name: fadeInBottom;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  animation-delay: .5s;
+  &.tablet {
+    font-size: 20px;
+    animation-name: fadeInRight;
+  }
+  &.mobile {
+    font-size: 14px;
+    animation-name: fadeInRight;
+    padding: 10px;
+    margin: 10px 0px 0px 0px;
+  }
+}
+
+@keyframes fadeInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.right {
+  display: flex;
+  justify-content: center;
+  max-width: 420;
+  min-width: 420;
+  margin-top: 100;
+  padding: 50;
+}
+
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

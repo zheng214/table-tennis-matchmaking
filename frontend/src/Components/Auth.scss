@@ -1,0 +1,15 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  > div {
+    margin: 10px;
+  }
+  button {
+    margin-top: 10px;
+    svg {
+      margin-bottom: 5px;
+    }
+  }
+}
