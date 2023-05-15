@@ -6,6 +6,8 @@ import axios from 'axios';
 export const ChatContext = createContext();
 
 const ENDPOINT = 'https://tt-matchmaking.herokuapp.com/'
+// const ENDPOINT = 'http://localhost:5000'
+console.log(process.env.NODE_ENV)
 let socket;
 
 export default function ChatProvider({ children }) {
@@ -14,6 +16,7 @@ export default function ChatProvider({ children }) {
   const [chats, setChats] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [socketConnected, setSocketConnected] = useState(false);
 
   const history = useHistory();
 
@@ -28,6 +31,9 @@ export default function ChatProvider({ children }) {
     if (userInfo) {
       socket.emit('setup', userInfo);
     }
+    socket.on('connected', () => {
+      setSocketConnected(true);
+    })
   }, [history])
 
   const fetchChats = async () => {
@@ -109,6 +115,8 @@ export default function ChatProvider({ children }) {
       setNotifications,
       messages,
       setMessages,
+      socketConnected,
+      setSocketConnected,
     }}>
       {children}
     </ChatContext.Provider>
