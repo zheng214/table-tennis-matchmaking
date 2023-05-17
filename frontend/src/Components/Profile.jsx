@@ -29,7 +29,7 @@ export default function Profile({ user }) {
                 <PlaceIcon />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="Location" secondary={renderLocation(user.city, user.country)} />
+            <ListItemText primary="Location" secondary={user.location} />
           </ListItem>
           <Divider component="li" />
           <ListItem sx={{ alignItems: 'start', pl: 0 }}>
@@ -57,16 +57,4 @@ export default function Profile({ user }) {
       </Box>
     </>
   )
-}
-
-export function renderLocation(city, country) {
-  if (city && country) {
-    return `${city}, ${country}`;
-  }
-
-  if (!city && country) {
-    return country;
-  }
-
-  return city || 'No location specified'
 }

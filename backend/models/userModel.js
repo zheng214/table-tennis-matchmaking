@@ -21,15 +21,7 @@ const userSchema = mongoose.Schema({
     type: String,
     default: 'https://images.unsplash.com/photo-1609710228159-0fa9bd7c0827?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
   },
-  city: {
-    type: String,
-    trim: true,
-  },
-  country: {
-    type: String,
-    trim: true,
-  },
-  normalizedCity: {
+  location: {
     type: String,
     trim: true,
   },

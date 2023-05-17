@@ -49,12 +49,6 @@ export default function MessageDialog(props) {
         { userId: selectedUser._id },
         config,
       );
-      const activeChat = chats.find(c => c._id === data._id);
-      if (!activeChat) {
-        setChats([ data, ...chats])
-      } else {
-        setChats([ data, ...chats.filter(c => c._id !== data._id)])
-      }
 
       const messageResponse = await axios.post(
         'api/message',
@@ -64,6 +58,13 @@ export default function MessageDialog(props) {
         },
         config,
       );
+
+      const activeChat = chats.find(c => c._id === data._id);
+      if (!activeChat) {
+        setChats([ messageResponse.data.chat, ...chats])
+      } else {
+        setChats([ messageResponse.data.chat, ...chats.filter(c => c._id !== data._id)])
+      }
 
       setMessages([...messages, messageResponse.data]);
       socket.emit('new message', messageResponse.data)

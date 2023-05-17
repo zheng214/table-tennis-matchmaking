@@ -21,6 +21,7 @@ import { useHistory } from 'react-router-dom';
 import { ChatState } from '../Context/ChatProvider';
 import LoadingButton from './LoadingButton';
 import CountryPicker from './CountryPicker';
+import GoogleMaps from './GoogleMaps';
 
 const Signup = () => {
   const history = useHistory();
@@ -38,10 +39,11 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [pic, setPic] = useState();
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('');
   const [availability, setAvailability] = useState('');
   const [level, setLevel] = useState('Beginner');
+
+  const [locationValue, setLocationValue] = React.useState(null);
+  const [locationInputValue, setLocationInputValue] = React.useState('');
 
   const [emailError, setEmailError] = useState('');
   const [nameError, setNameError] = useState('');
@@ -84,7 +86,6 @@ const Signup = () => {
   }
 
   const handleNext = async () => {
-    setActiveStep((s) => s + 1)
     if (!email) {
       return setEmailError('Please enter your email!');
     } else if (!/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}/.test(email)) {
@@ -133,7 +134,7 @@ const Signup = () => {
       }
       const { data } = await axios.post(
         'api/user',
-        { name, email, password, pic, city, country, availability, level },
+        { name, email, password, pic, location: locationInputValue, availability, level },
         config,
       );
 
@@ -249,6 +250,12 @@ const Signup = () => {
       ) : (
         <>
           <div className='form'>
+            <GoogleMaps
+              value={locationValue}
+              setValue={setLocationValue}
+              inputValue={locationInputValue}
+              setInputValue={setLocationInputValue}
+            />
             <FormControl sx={{ mt: 2, minWidth: 300 }}>
               <InputLabel>Skill Level</InputLabel>
               <Select
@@ -256,6 +263,7 @@ const Signup = () => {
                 id="demo-simple-select"
                 value={level}
                 label="Skill Level"
+                sx={{ "& .MuiSelect-icon": { right: 9 } }}
                 onChange={(e) => setLevel(e.target.value)}
               >
                 <MenuItem value={'Beginner'}>Beginner</MenuItem>
@@ -263,15 +271,6 @@ const Signup = () => {
                 <MenuItem value={'Advanced'}>Advanced</MenuItem>
               </Select>
             </FormControl>
-            <TextField
-              style ={{width: 300}}
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              label="City (eg. Montreal)"
-              variant="outlined"
-              inputProps={{ maxLength: 30 }}
-            />
-            <CountryPicker country={country} setCountry={setCountry} endAdornStyle={{ top: '5px' }} />
             <TextField
               style = {{width: 300}}
               value={availability}

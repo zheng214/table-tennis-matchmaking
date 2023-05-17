@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { ChatState } from '../Context/ChatProvider';
 import LoadingButton from '../Components/LoadingButton';
+import GoogleMaps from '../Components/GoogleMaps';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -35,34 +36,37 @@ export default function ProfileDialog(props) {
 
   const [loading, setLoading] = useState(false);
 
-  const [city, setCity] = useState(user.city);
-  const [editingCity, setEditingCity] = useState(false);
-  const [savedCity, setSavedCity] = useState(user.city);
+  const [locationInputValue, setLocationInputValue] = React.useState('');
+  const [editingLocation, setEditingLocation] = useState(false);
+  const [savedLocation, setSavedLocation] = useState(user.location);
+  const [locationValue, setLocationValue] = React.useState(null);
+ 
   
-  const handleEditCity = () => {
-    setEditingCity(true);
+  const handleEditLocation = () => {
+    setEditingLocation(true);
   }
 
-  const handleDoneEditingCity = () => {
-    setSavedCity(city);
-    setEditingCity(false);
+  const handleDoneEditingLocation = () => {
+    setSavedLocation(locationInputValue);
+    setEditingLocation(false);
   }
 
-  const [country, setCountry] = useState(user.country);
-  const [editingCountry, setEditingCountry] = useState(false);
-  const [savedCountry, setSavedCountry] = useState(user.country);
+  // const [country, setCountry] = useState(user.country);
+  // const [editingCountry, setEditingCountry] = useState(false);
+  // const [savedCountry, setSavedCountry] = useState(user.country);
   
-  const handleEditCountry = () => {
-    setEditingCountry(true);
-  }
+  // const handleEditCountry = () => {
+  //   setEditingCountry(true);
+  // }
 
-  const handleDoneEditingCountry = () => {
-    setSavedCountry(country);
-    setEditingCountry(false);
-  }
+  // const handleDoneEditingCountry = () => {
+  //   setSavedCountry(country);
+  //   setEditingCountry(false);
+  // }
 
   const [level, setLevel] = useState(user.level);
   const [editingLevel, setEditingLevel] = useState(false);
+  console.log(user)
   const [savedLevel, setSavedLevel] = useState(user.level);
   
   const handleEditLevel = () => {
@@ -117,9 +121,9 @@ export default function ProfileDialog(props) {
   }
 
   const handleClose = () => {
-    setSavedCity(user.city);
-    setCity(user.city);
-    setEditingCity(false);
+    setSavedLocation(user.location);
+    setLocationInputValue(user.location);
+    setEditingLocation(false);
     setSavedAvailability(user.availability);
     setAvailability(user.availability);
     setEditingAvailability(false);
@@ -136,13 +140,12 @@ export default function ProfileDialog(props) {
       }
       const { data } = await axios.put(
         'api/user/edit',
-        { city: savedCity, country: savedCountry, availability: savedAvailability, level: savedLevel, pic: savedPic },
+        { location: savedLocation, availability: savedAvailability, level: savedLevel, pic: savedPic },
         config,
       );
       const updatedUser = {
         ...user,
-        city: data.city,
-        country: data.country,
+        location: data.location,
         availability: data.availability,
         level: data.level,
         pic: data.pic,
@@ -186,7 +189,7 @@ export default function ProfileDialog(props) {
               {user.name}
             </Typography>
           </Box>
-          <Box sx={{ m: 1 }}>
+          {/* <Box sx={{ m: 1 }}>
             {editingCity
               ? (
                 <>
@@ -215,9 +218,9 @@ export default function ProfileDialog(props) {
                 </Box>
               )
             }
-          </Box>
+          </Box> */}
           <Box sx={{ m: 1 }}>
-            {editingCountry
+            {editingLocation
               ? (
                 <Box sx={{
                   display: {
@@ -226,16 +229,22 @@ export default function ProfileDialog(props) {
                     md: 'flex'
                   }
                 }}>
-                  <CountryPicker
-                    country={country}
-                    setCountry={setCountry}
-                    endAdornStyle={{ top: '12px' }}
-                    sx={{ width: 275 }}
+                  <GoogleMaps
+                    value={locationValue}
+                    setValue={setLocationValue}
+                    inputValue={locationInputValue}
+                    setInputValue={setLocationInputValue}
+                    sx={{
+                      width: 275,
+                      ".MuiAutocomplete-endAdornment": {
+                        top: '15px',
+                      },
+                    }}
                   />
                   <Button
                     variant="contained"
                     sx={{ m: '10px' }}
-                    onClick={handleDoneEditingCountry}
+                    onClick={handleDoneEditingLocation}
                   >
                     Save
                   </Button>
@@ -243,8 +252,8 @@ export default function ProfileDialog(props) {
               )
               : (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Box sx={{ fontSize: 18, color: 'text.secondary' }}>Country: {savedCountry || 'No country specified'}</Box>
-                  <IconButton color="primary" aria-label="edit" onClick={handleEditCountry}>
+                  <Box sx={{ fontSize: 18, color: 'text.secondary' }}>Location: {savedLocation || 'No location specified'}</Box>
+                  <IconButton color="primary" aria-label="edit" onClick={handleEditLocation}>
                     <EditIcon />
                   </IconButton>
                 </Box>
@@ -336,9 +345,8 @@ export default function ProfileDialog(props) {
           variant="contained"
           onClick={handleSaveChanges}
           disabled={
-            loading || editingAvailability || editingCity || editingCountry || editingLevel ||
-            (savedCity === user.city
-              && savedCountry === user.country
+            loading || editingAvailability || editingLocation || editingLevel ||
+            (savedLocation === user.location
               && savedAvailability === user.availability
               && savedLevel === user.level
               && savedPic === user.pic

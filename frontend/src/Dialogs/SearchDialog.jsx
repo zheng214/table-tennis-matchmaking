@@ -118,7 +118,7 @@ export default function SearchDialog(props) {
               onChange={(e) => setSearchText(e.target.value)}
               label="Search"
               variant="standard"
-              placeholder="Find someone in a city or by name"
+              placeholder="Find someone in a city"
             />
           </Box>
           <Box
@@ -194,7 +194,7 @@ export default function SearchDialog(props) {
                                 {user?.name}
                               </Typography>
                               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                {user?.city || 'No city specified'}
+                                {user?.location || 'No location specified'}
                               </Typography>
                               <Typography variant="body2">
                                 Availability: {user.availability?.length > 40 ? `${user.availability?.substring(0, 40)}...` : user.availability || 'No availability specified'}

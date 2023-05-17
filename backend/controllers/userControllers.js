@@ -3,7 +3,7 @@ const User = require('../models/userModel');
 const generateToken = require('../config/generateToken');
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, pic, city, availability, level } = req.body;
+  const { name, email, password, pic, availability, level, location } = req.body;
   if (!name || !email || !password) {
     res.status(400);
     throw new Error('Please Enter all Fields');
@@ -20,9 +20,7 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     pic,
-    city,
-    country,
-    normalizedCity: deburr(city),
+    location,
     availability,
     level,
   });
@@ -33,9 +31,8 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       pic: user.pic,
-      city: user.city,
-      country: user.country,
-      normalizedCity: user.normalizedCity,
+      location: user.location,
+      level: user.level,
       availability: user.availability,
       token: generateToken(user._id),
     });
@@ -56,9 +53,7 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       pic: user.pic,
-      city: user.city,
-      country: user.country,
-      normalizedCity: user.normalizedCity,
+      location: user.location,
       availability: user.availability,
       level: user.level,
       token: generateToken(user._id),
@@ -84,7 +79,7 @@ const allUsers = asyncHandler(async (req, res) => {
           index: 'default',
           text: {
             query: search,
-            path: ['city'],
+            path: ['location'],
             fuzzy: {},
           }
         }
@@ -96,7 +91,7 @@ const allUsers = asyncHandler(async (req, res) => {
         pipeline: [
           {
             $match: {
-              city: {
+              location: {
                 $regex: search,
                 $options: 'i'
               }
@@ -115,9 +110,6 @@ const allUsers = asyncHandler(async (req, res) => {
         name: {
           $first: '$name'
         },
-        city: {
-          $first: '$city'
-        },
         pic: {
           $first: '$pic'
         },
@@ -127,8 +119,8 @@ const allUsers = asyncHandler(async (req, res) => {
         availability: {
           $first: '$availability'
         },
-        country: {
-          $first: '$country'
+        location: {
+          $first: '$location'
         }
       }
     })
@@ -141,16 +133,15 @@ const allUsers = asyncHandler(async (req, res) => {
 })
 
 const editProfile = asyncHandler(async (req, res) => {
-  const { city, country, availability, level, pic } = req.body;
+  const { location, availability, level, pic } = req.body;
+  console.log(req.body)
   const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
     {
-      city,
-      normalizedCity: deburr(city),
+      location,
       availability,
       level,
       pic,
-      country,
     }, {
       new: true,
     }

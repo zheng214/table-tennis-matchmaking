@@ -109,7 +109,7 @@ export default function SearchPage(props) {
       setSearchResults(allSearchResults.filter(user => user.level === level))
     }
   }, [level])
-  
+
   return (
     <>
       <Topbar />
@@ -201,7 +201,7 @@ export default function SearchPage(props) {
                   <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                     {searchResults.map((user) => {
                       return (
-                        <Card sx={{ minWidth: 275, margin: 2, cursor: 'pointer', backgroundColor: user._id === selectedUser?._id ? 'rgba(244, 244, 244, 255)' : 'inherit' }} key={user._id} alignItems="flex-start" onClick={() => setSelectedUser(user)}>
+                        <Card sx={{ minWidth: 275, margin: 2, cursor: 'pointer', backgroundColor: user._id === selectedUser?._id ? 'rgba(244, 244, 244, 255)' : 'inherit', alignItems: "flex-start" }} key={user._id} onClick={() => setSelectedUser(user)}>
                           <CardContent>
                             <Avatar
                               alt={user?.name}
@@ -211,7 +211,7 @@ export default function SearchPage(props) {
                               {user?.name}
                             </Typography>
                             <Typography color="text.secondary">
-                              {user?.city || 'No city specified'}
+                              {user?.location || 'No city specified'}
                             </Typography>
                             <Typography color="text.secondary">
                               Skill level: {user.level || 'Not specified'}

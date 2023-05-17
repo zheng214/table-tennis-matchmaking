@@ -10,7 +10,7 @@ import { debounce } from '@mui/material/utils';
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
-const GOOGLE_MAPS_API_KEY = 'AIzaSyCQK5uP8Klr_d6GCeLE05H94o_wSCiXgzY';
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 function loadScript(src, position, id) {
   if (!position) {
@@ -26,13 +26,9 @@ function loadScript(src, position, id) {
 
 const autocompleteService = { current: null };
 
-export default function GoogleMaps() {
-  const [value, setValue] = React.useState(null);
-  const [inputValue, setInputValue] = React.useState('');
+export default function GoogleMaps({ value, setValue, inputValue, setInputValue, sx }) {
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
-
-  console.log(value);
 
   if (typeof window !== 'undefined' && !loaded.current) {
     if (!document.querySelector('#google-maps')) {
@@ -50,7 +46,7 @@ export default function GoogleMaps() {
     () =>
       debounce((request, callback) => {
         autocompleteService.current.getPlacePredictions(request, callback);
-      }, 400),
+      }, 300),
     [],
   );
 
@@ -94,7 +90,10 @@ export default function GoogleMaps() {
   return (
     <Autocomplete
       id="google-map-demo"
-      sx={{ width: 300 }}
+      sx={{
+        width: 300,
+        ...sx,
+      }}
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.description
       }
@@ -113,7 +112,7 @@ export default function GoogleMaps() {
         setInputValue(newInputValue);
       }}
       renderInput={(params) => (
-        <TextField {...params} label="Add a location" fullWidth />
+        <TextField {...params} label="Location" fullWidth />
       )}
       renderOption={(props, option) => {
         const matches =
