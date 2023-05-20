@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
 
@@ -48,6 +48,12 @@ const ChatPage = (props) => {
   const [searchDialogOpen, setSearchDialogOpen] = useState(false);
   const handleOpenSearchDialog = () => setSearchDialogOpen(true);
   const handleCloseSearchDialog = () => setSearchDialogOpen(false);
+
+  const loaded = useRef(false);
+  if (!loaded.current) {
+    setSelectedChat();
+    loaded.current = true;
+  }
 
   return (
     <>

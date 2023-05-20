@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import { ChatState } from '../Context/ChatProvider';
 
+import LoadingButton from '../Components/LoadingButton';
+
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -31,15 +33,16 @@ import {
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import MessageDialog from '../Dialogs/MessageDialog';
 import Profile from '../Components/Profile';
 import Topbar from '../Components/Topbar';
+import MessageDock from '../Components/MessageDock';
 
 export default function SearchPage(props) {
-  const { user, setUser, setSelectedChat } = ChatState();
+  const { user, setUser, setSelectedChat, chats, setChats } = ChatState();
 
   const [searchText, setSearchText] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [loadingChat, setLoadingChat] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [allSearchResults, setAllSearchResults] = useState([]);
   const [selectedUser, setSelectedUser] = useState();
@@ -52,7 +55,7 @@ export default function SearchPage(props) {
   useEffect(() => {
     if (searchText) {
       const debounced = setTimeout(async () => {
-        setLoading(true)
+        setLoadingUsers(true)
         try {
           const config = {
             headers: {
@@ -63,7 +66,7 @@ export default function SearchPage(props) {
             `api/user?search=${searchText}`,
             config,
           );
-          setLoading(false)
+          setLoadingUsers(false)
           setAllSearchResults(data)
           if (level === 'No Preference') {
             setSearchResults(data);
@@ -72,36 +75,44 @@ export default function SearchPage(props) {
           }
           
         } catch(e) {
-          setLoading(false)
+          setLoadingUsers(false)
         }
       }, 400)
       return () => clearTimeout(debounced)
     }
   }, [searchText])
 
-  const [messageDialogOpen, setMessageDialogOpen] = useState(false);
+  const handleMessage = async () => {
+    setLoadingChat(true)
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-type": 'application/json',
+        }
+      }
+      let { data } = await axios.post(
+        'api/chat',
+        { userId: selectedUser._id },
+        config,
+      );
 
-  const handleOpenMessageDialog = () => {
-    setMessageDialogOpen(true);
-  };
+      setSelectedChat(data)
 
-  const handleCloseMessageDialog = () => {
-    setMessageDialogOpen(false);
-  }
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
+      const activeChat = chats.find(c => c._id === data._id);
+      if (!activeChat) {
+        setChats([ data, ...chats])
+      } else {
+        setChats([ data, ...chats.filter(c => c._id !== data._id)])
+      }
+      setLoadingChat(false)
+    } catch(e) {
+      console.log(e.message)
+      setLoadingChat(false)
     }
-    setSnackbarOpen(false);
   };
-  
-  const handleMessageSent = () => {
-    setSnackbarOpen(true);
-    setMessageDialogOpen(false);
-  }
 
+  
   useEffect(() => {
     if (level === 'No Preference') {
       setSearchResults(allSearchResults)
@@ -113,6 +124,7 @@ export default function SearchPage(props) {
   return (
     <>
       <Topbar />
+      <MessageDock />
       <Container sx={{ pt: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <FormControl fullWidth sx={{ m: 1 }}>
@@ -188,7 +200,7 @@ export default function SearchPage(props) {
               alignItems: 'center',
               flexDirection: 'column'
             }}>
-              {loading
+              {loadingUsers
                 ? (
                   <Stack spacing={1}>
                     <Skeleton variant="rectangular" width={340} height={80} />
@@ -272,23 +284,12 @@ export default function SearchPage(props) {
                 justifyContent: 'end'
               }}
             >
-              <Button sx={{ m: 1 }} variant="contained" disabled={!selectedUser} onClick={handleOpenMessageDialog}>
+              <LoadingButton sx={{ m: 1 }} variant="contained" disabled={loadingChat} loading={loadingChat} onClick={handleMessage}>
                 Message
-              </Button>
+              </LoadingButton>
             </Box>}
           </Box>
         </Box>
-        <MessageDialog 
-          open={messageDialogOpen}
-          onClose={handleCloseMessageDialog}
-          selectedUser={selectedUser}
-          onSent={handleMessageSent}
-        />
-        <Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={handleSnackbarClose}>
-          <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-            Message Sent!
-          </Alert>
-        </Snackbar>
       </Container>
     </>
   );

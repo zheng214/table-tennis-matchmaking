@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === 'production') {
 let socket;
 let selectedChatCompare;
 
-export default function ChatBox() {
+export default function ChatBox({ mini }) {
   const { user, chats, setChats, selectedChat, setSelectedChat, notifications, setNotifications, messages, setMessages, socketConnected } = ChatState();
 
   const [loading, setLoading] = useState(false);
@@ -192,6 +192,79 @@ export default function ChatBox() {
         socket.emit('stop typing', { chatId: selectedChat._id, userId: user._id });
       }
     }, timerLength)
+  }
+
+  if (mini) {
+    return (
+      <Box
+        sx={{
+          display: selectedChat ? 'flex' : 'none',
+          flexDirection: 'column',
+          mr: 3,
+          width: 400,
+          height: 400,
+          borderLeft: '1px solid rgb(212, 210, 208)',
+          borderRight: '1px solid rgb(212, 210, 208)',
+          borderRadius: '10px 10px 0 0',
+          backgroundColor: 'white',
+        }}
+      >
+        <Box
+          sx={{
+            color: 'white',
+            backgroundColor: '#2196f3',
+            borderRadius: '10px 10px 0 0',
+            textAlign: 'center',
+            
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
+        >
+          <h4 style={{paddingLeft: 20}}>{selectedChatUser.name}</h4>
+          <span style={{ paddingRight: 20, cursor: 'pointer', fontWeight: 'bold' }} onClick={() => setSelectedChat()}>X</span>
+        </Box>
+        <Box sx={{
+          height: '500px',
+          overflow: 'auto',
+          backgroundColor: 'rgba(244, 244, 244, 255)'
+        }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              borderRadius: '15px 15px 0 0',
+              width: '100%',
+              overflowY: 'hidden',
+              mt: 1,
+              
+            }}
+          >
+            {loading ? (
+              <CircularProgress sx={{ margin: 'auto' }} />
+            ) : (
+              <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+                <ScrollableChat messages={messages} showLottie={typingUsers.length && typingUsers.some(x => x !== user._id)}/>
+              </Box>
+            )}
+          </Box>
+        </Box>
+        <TextField
+          id="outlined-size-small"
+          placeholder="Enter a message.."
+          value={newMessage}
+          onChange={handleTyping}
+          fullWidth
+          multiline
+          rows={2}
+          maxRows={2}
+        />
+        <Button variant='contained' sx={{ ml: 'auto', my: 1, mr: 1 }} onClick={sendMessage} disabled={!newMessage || !(newMessage.trim())}>
+          Send
+        </Button>
+      </Box>
+    )
   }
 
   return (

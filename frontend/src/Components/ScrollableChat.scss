@@ -1,8 +1,16 @@
-.scrollable-chat::-webkit-scrollbar {
-  display: none;
+.date-divider {
+  display: flex;
+  align-items: center;
+  font-size: 0.9375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.scrollable-chat {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+.date-divider::before, .date-divider::after {
+  content: '';
+  height: 1px;
+  background-color: silver;
+  flex-grow: 1;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
