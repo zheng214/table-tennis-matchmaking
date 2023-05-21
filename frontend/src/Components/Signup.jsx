@@ -95,7 +95,6 @@ const Signup = () => {
   }
 
   const handleNext = async () => {
-    setActiveStep(a => a+1)
     if (!email) {
       return setEmailError('Please enter your email!');
     } else if (!/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}/.test(email)) {
