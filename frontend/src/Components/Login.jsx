@@ -104,6 +104,14 @@ const Login = () => {
       />
       <LoadingButton
         variant="contained"
+        onClick={() => { setEmail('guest@example.com'); setPassword('123123') }}
+        disabled={loading}
+        color="secondary"
+      >
+        Fill in Guest credentials
+      </LoadingButton>
+      <LoadingButton
+        variant="contained"
         onClick={handleSubmit}
         disabled={loading}
       >
