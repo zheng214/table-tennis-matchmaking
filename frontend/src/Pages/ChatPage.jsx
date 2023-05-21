@@ -49,12 +49,6 @@ const ChatPage = (props) => {
   const handleOpenSearchDialog = () => setSearchDialogOpen(true);
   const handleCloseSearchDialog = () => setSearchDialogOpen(false);
 
-  const loaded = useRef(false);
-  if (!loaded.current) {
-    setSelectedChat();
-    loaded.current = true;
-  }
-
   return (
     <>
       <Topbar />

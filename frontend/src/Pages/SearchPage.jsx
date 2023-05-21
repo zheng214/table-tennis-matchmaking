@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 import { ChatState } from '../Context/ChatProvider';
@@ -48,9 +48,11 @@ export default function SearchPage(props) {
   const [selectedUser, setSelectedUser] = useState();
   const [level, setLevel] = useState('No Preference');
 
-  useEffect(() => {
+  const loaded = useRef(false);
+  if (!loaded.current) {
     setSelectedChat();
-  }, [])
+    loaded.current = true;
+  }
 
   useEffect(() => {
     if (searchText) {

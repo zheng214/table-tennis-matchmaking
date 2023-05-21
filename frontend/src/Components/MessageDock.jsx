@@ -83,15 +83,15 @@ const MessageDock = () => {
           >
             <List sx={{ py: 0, width: '100%', bgcolor: 'background.paper' }}>
               {chats.map((chat, i) => {
-                console.log({chat})
                 const otherUser = chat.users.find(chatUser => chatUser._id !== user?._id);
                 const content = chat?.latestMessage?.content || ''
                 let latestMessageSender = '';
                 if (chat?.latestMessage?.sender?._id === user?._id) {
                   latestMessageSender = 'You: '
-                } else if (chat?.latestMessage?.sender?._id === otherUser._id) {
-                  latestMessageSender = `${otherUser.name}: `
+                } else if (chat?.latestMessage?.sender?._id === otherUser?._id) {
+                  latestMessageSender = `${otherUser?.name}: `
                 }
+                console.log({ chat })
                 return (
                   <>
                     <ListItemButton
@@ -103,10 +103,10 @@ const MessageDock = () => {
                       onClick={() => { setSelectedChat(chat) }}
                     >
                       <ListItemAvatar>
-                        <Avatar alt={otherUser.name} src={otherUser.pic} />
+                        <Avatar alt={otherUser?.name} src={otherUser?.pic} />
                       </ListItemAvatar>
                       <ListItemText
-                        primary={otherUser.name} 
+                        primary={otherUser?.name} 
                         primaryTypographyProps={{
                           style: {
                             overflow: 'hidden',

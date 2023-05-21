@@ -66,7 +66,6 @@ export default function ProfileDialog(props) {
 
   const [level, setLevel] = useState(user.level);
   const [editingLevel, setEditingLevel] = useState(false);
-  console.log(user)
   const [savedLevel, setSavedLevel] = useState(user.level);
   
   const handleEditLevel = () => {

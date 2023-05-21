@@ -60,6 +60,15 @@ const Signup = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const [open, setOpen] = React.useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const postDetails = (file) => {
     if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif') {
       setLoading(true);
@@ -86,6 +95,7 @@ const Signup = () => {
   }
 
   const handleNext = async () => {
+    setActiveStep(a => a+1)
     if (!email) {
       return setEmailError('Please enter your email!');
     } else if (!/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}/.test(email)) {
@@ -138,10 +148,14 @@ const Signup = () => {
         config,
       );
 
-      localStorage.setItem('userInfo', JSON.stringify(data));
-      setLoading(false);
-      setUser(data)
-      history.push('/');
+      setOpen(true);
+
+      setTimeout(() => {
+        localStorage.setItem('userInfo', JSON.stringify(data));
+        setLoading(false);
+        setUser(data)
+        history.push('/');
+      }, 2000)
     } catch (error) {
       console.log(error)
       setLoading(false);
@@ -255,6 +269,11 @@ const Signup = () => {
               setValue={setLocationValue}
               inputValue={locationInputValue}
               setInputValue={setLocationInputValue}
+              sx={{
+                ".MuiAutocomplete-endAdornment": {
+                  top: '5px',
+                },
+              }}
             />
             <FormControl sx={{ mt: 2, minWidth: 300 }}>
               <InputLabel>Skill Level</InputLabel>
@@ -303,6 +322,11 @@ const Signup = () => {
           </div>
         </>
       )}
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Account created!
+        </Alert>
+      </Snackbar>
     </>
   );
 }
